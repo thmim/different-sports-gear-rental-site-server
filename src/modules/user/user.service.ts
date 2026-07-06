@@ -22,6 +22,7 @@ const createUserIntoDb = async (payload: RegisterUserPayload) => {
             password: hashPassword,
           
         },
+        
         omit: { password: true },
 
     })
