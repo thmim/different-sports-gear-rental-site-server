@@ -1,0 +1,21 @@
+model Gearitems {
+    id            String           @id @default(uuid())
+    provider      Users            @relation(fields: [provider_id], references: [id])
+    provider_id   String
+    category      Categories       @relation(fields: [category_id], references: [id])
+    category_id   String
+    name          String
+    product_image String?
+    description   String
+    brand         String
+    is_available  Boolean          @default(true)
+    condition     ProductCondition @default(LIKE_NEW)
+    daily_price   Decimal          @db.Decimal(10, 2)
+    quantity      Int
+    created_at    DateTime         @default(now())
+    updated_at    DateTime         @updatedAt
+    rental_order  RentalOrder[]
+    reviews       Reviews[]
+
+    @@map("gearitems")
+}

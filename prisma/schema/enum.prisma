@@ -1,0 +1,26 @@
+enum Role {
+    CUSTOMER
+    PROVIDER
+    ADMIN
+}
+
+enum UserStatus {
+    ACTIVE
+    BLOCKED
+    DELETED
+}
+
+enum RentalStatus {
+    PENDING
+    ACTIVE
+    RETURNED
+    CANCELLED
+}
+
+enum ProductCondition {
+    NEW
+    LIKE_NEW
+    GOOD
+    FAIR
+    POOR
+}
