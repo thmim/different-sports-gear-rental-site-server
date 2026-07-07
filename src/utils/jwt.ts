@@ -18,6 +18,7 @@ const  createToken = (payload:JwtPayload,secret:string,expiresIn : SignOptions) 
 const verifyToken = (token:string,secret:string) =>{
   try {
     const verifiedToken = jwt.verify(token,secret)
+   
     return {
         success:true,
         data:verifiedToken

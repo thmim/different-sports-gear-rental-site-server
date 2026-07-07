@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IloginUser } from "./auth.interface";
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcryptjs";
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 import config from "../../config";
 import { jwtUtils } from "../../utils/jwt";
 
@@ -42,6 +42,41 @@ const loginUserIntoDb = async (payload:IloginUser) =>{
     return {accessToken,refreshToken}
 }
 
+//regenerate refresh token after expire
+const regenerateRefreshToken = async (refreshToken:string)=>{
+    const verifyRefreshToken = jwtUtils.verifyToken(refreshToken,config.jwt_refresh_secret)
+
+    if(!verifyRefreshToken.success === true){
+        throw new Error(verifyRefreshToken.error)
+    }
+    
+
+    const {id} = verifyRefreshToken.data as JwtPayload;
+
+    const user = await prisma.users.findUniqueOrThrow({
+        where:{
+            id
+        }
+    })
+
+    if(user.status === "SUSPEND"){
+        throw new Error("User is Suspend!")
+    }
+
+    const jwtPayload = {
+        id,
+        email:user.email,
+        name:user.name,
+        role:user.role
+    }
+
+    const accessToken = jwtUtils.createToken(jwtPayload,config.jwt_access_secret,config.jwt_access_expires as SignOptions)
+
+    return accessToken;
+
+}
+
 export const authServices = {
-    loginUserIntoDb
+    loginUserIntoDb,
+    regenerateRefreshToken
 }
