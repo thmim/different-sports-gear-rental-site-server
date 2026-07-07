@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { userServices } from "./user.service";
 import { catchAsync } from "../../utils/catchasync";
 import { sendResponse } from "../../utils/sendResponse";
@@ -7,7 +7,7 @@ import { jwtUtils } from "../../utils/jwt";
 import config from "../../config";
 
 
-const createUser = catchAsync( async(req:Request,res:Response) =>{
+const createUser = catchAsync( async(req:Request,res:Response,next:NextFunction) =>{
 const user = req.body;
 const result = await userServices.createUserIntoDb(user)
 
@@ -21,7 +21,7 @@ sendResponse(res,{
 })
 
 // get me controller
-const getMe = catchAsync(async(req:Request,res:Response)=>{
+const getMe = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
   
   const result = await userServices.getMeFromDb(req.user?.id as string)
   sendResponse(res,{
@@ -33,7 +33,7 @@ const getMe = catchAsync(async(req:Request,res:Response)=>{
 })
 
 // update user controller
-const updateUser = catchAsync(async(req:Request,res:Response)=>{
+const updateUser = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
   const id = req.params.id;
   
   const payload = req.body;

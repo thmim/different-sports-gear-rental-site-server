@@ -4,6 +4,8 @@ import config from "./config";
 import cookieParser from "cookie-parser";
 import { userRouter } from "./modules/user/user.route";
 import { authRoute } from "./modules/auth/auth.route";
+import { categoriesRoute } from "./modules/categories/categories.route";
+import { gearItemRoute } from "./modules/gearItem/gearItem.route";
 const app:Application = express();
 
 app.use(cors({
@@ -28,5 +30,10 @@ app.use("/api/auth",userRouter);
 app.use("/api/auth",authRoute);
 // update user
 app.use("/api/admin/users",userRouter);
+// create category by admin  and get categories by customer
+app.use("/api",categoriesRoute);
+
+// gear items create rote
+app.use("/api/provider",gearItemRoute);
 
 export default app;
