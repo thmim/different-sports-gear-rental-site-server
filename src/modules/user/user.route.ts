@@ -10,4 +10,7 @@ router.post("/register",userController.createUser);
 // get me
 router.get("/me",auth(Role.ADMIN,Role.PROVIDER,Role.CUSTOMER),userController.getMe);
 
+// update user role and status
+router.patch("/:id",auth(Role.ADMIN),userController.updateUser);
+
 export const userRouter = router;

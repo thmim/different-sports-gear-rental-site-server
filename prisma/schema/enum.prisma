@@ -5,9 +5,9 @@ enum Role {
 }
 
 enum UserStatus {
+   
+    SUSPEND
     ACTIVE
-    BLOCKED
-    DELETED
 }
 
 enum RentalStatus {

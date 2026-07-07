@@ -26,5 +26,7 @@ app.get("/", (req:Request,res:Response)=>{
 app.use("/api/auth",userRouter);
 // login api
 app.use("/api/auth",authRoute);
+// update user
+app.use("/api/admin/users",userRouter);
 
 export default app;

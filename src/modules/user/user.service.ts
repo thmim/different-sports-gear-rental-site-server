@@ -43,7 +43,26 @@ const getMeFromDb = async(userId:string)=>{
 
 }
 
+// update user role and status from db through admin
+const updateUserFromDb = async(userId:string,payload:any) =>{
+  const {status,role} = payload;
+  const updateUser = await prisma.users.update({
+    where:{
+        id:userId
+    },
+    data:{
+       
+            role,
+            status
+        
+    },
+    omit:{password:true}
+  })
+  return updateUser;
+}
+
 export const userServices = {
     createUserIntoDb,
-    getMeFromDb
+    getMeFromDb,
+    updateUserFromDb
 }

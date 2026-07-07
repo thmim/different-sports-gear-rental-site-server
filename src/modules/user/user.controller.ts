@@ -32,7 +32,24 @@ const getMe = catchAsync(async(req:Request,res:Response)=>{
   })
 })
 
+// update user controller
+const updateUser = catchAsync(async(req:Request,res:Response)=>{
+  const id = req.params.id;
+  
+  const payload = req.body;
+  const result = await userServices.updateUserFromDb(id as string,payload);
+
+  sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"User Updated successfully",
+        data:result
+    })
+})
+
+
 export const userController = {
     createUser,
-    getMe
+    getMe,
+    updateUser
 }
