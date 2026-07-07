@@ -22,13 +22,8 @@ sendResponse(res,{
 
 // get me controller
 const getMe = catchAsync(async(req:Request,res:Response)=>{
-  const {accessToken} = req.cookies;
-  const verifiedToken = jwtUtils.verifyToken(accessToken,config.jwt_access_secret)
-
-  if(typeof verifiedToken === "string"){
-    throw new Error(verifiedToken)
-  }
-  const result = await userServices.getMeFromDb(verifiedToken.id)
+  
+  const result = await userServices.getMeFromDb(req.user?.id as string)
   sendResponse(res,{
     success:true,
     statusCode:httpStatus.OK,
