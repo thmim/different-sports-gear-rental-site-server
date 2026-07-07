@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
 import { RegisterUserPayload } from "./user.interface";
 import config from "../../config";
+import { Role } from "../../../generated/prisma/enums";
 
 const createUserIntoDb = async (payload: RegisterUserPayload) => {
     const { name, email, password } = payload;
@@ -20,6 +21,7 @@ const createUserIntoDb = async (payload: RegisterUserPayload) => {
             name,
             email,
             password: hashPassword,
+            
           
         },
         
