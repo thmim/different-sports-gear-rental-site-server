@@ -30,6 +30,19 @@ const getAllGearItem = catchAsync(async (req: Request, res: Response, next: Next
 
 })
 
+// get all gear for everyone
+const getAllGearItemForAll = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const query = req.query;
+  const result = await gearItemsServices.getGearForAllFromDb(query);
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"Gear Item retrived successfully",
+        data:result
+    })
+
+})
+
 // get gear details by id
 const getGearDetails = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
@@ -91,5 +104,6 @@ export const gearItemsController = {
     updateGearItem,
     deleteGearItem,
     getAllGearItem,
-    getGearDetails
+    getGearDetails,
+    getAllGearItemForAll
 }

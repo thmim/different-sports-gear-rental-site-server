@@ -16,6 +16,8 @@ router.delete("/:id", auth(Role.PROVIDER,Role.ADMIN) ,gearItemsController.delete
 router.get("/gear",auth(Role.ADMIN),gearItemsController.getAllGearItem);
 // get single gear details by id
 router.get("/:id",gearItemsController.getGearDetails);
+// get all gear for everyone
+router.get("/",gearItemsController.getAllGearItemForAll);
 
 
 export const gearItemRoute = router;

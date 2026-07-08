@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { IGearItems, IUpdateItems } from "./gearItem.interface"
+import { IGearFilterQuery, IGearItems, IUpdateItems } from "./gearItem.interface"
 
 const createGearItemIntoDb = async (payload:IGearItems,id:string)=>{
    const {name,description,category_id,brand,daily_price,quantity,product_image = "Not provided",condition} = payload;
@@ -45,6 +45,60 @@ const getGearDetailsFromDb = async (gearId:string)=>{
     }
    })
    return singleGearDetails;
+}
+
+// get all gear for everyone
+const getGearForAllFromDb = async (query:IGearFilterQuery)=>{
+  const limit = query.limit ? Number(query.limit) : 10;
+    const page = query.page ? Number(query.page) : 1;
+    const skip = (page - 1) * limit;
+    const sortBy = query.sortBy ? query.sortBy : "created_at";
+    const sortOrder = query.sortOrder ? query.sortOrder : "desc";
+
+    // get gear 
+    const gears = await prisma.gearitems.findMany({
+        where: {
+            // filtering & searching combined using AND/OR
+            AND: [
+                {
+                    is_available: true 
+                },
+                {
+                    // searching
+                    OR: [
+                        {
+                            name: {
+                                contains: query.searchTerm,
+                                mode: "insensitive"
+                            }
+                        },
+                        {
+                            description: {
+                                contains: query.searchTerm,
+                                mode: "insensitive"
+                            }
+                        }
+                    ]
+                },
+
+                // filtering
+                query.category ? { category_id: query.category } : {},
+                query.brand ? { brand: { equals: query.brand, mode: "insensitive" } } : {},
+                query.minPrice ? { daily_price: { gte: Number(query.minPrice) } } : {},
+                query.maxPrice ? { daily_price: { lte: Number(query.maxPrice) } } : {}
+            ]
+        },
+
+        take: limit,
+        skip: skip,
+        orderBy: {
+            [sortBy]: sortOrder
+        },
+        include: {
+            category: true
+        }
+    });
+    return gears;
 }
 
 // update item
@@ -101,5 +155,6 @@ export const gearItemsServices = {
     updateGearItemFromDb,
     deleteGearItemFromDb,
     getAllGearFromDb,
-    getGearDetailsFromDb
+    getGearDetailsFromDb,
+    getGearForAllFromDb
 }
