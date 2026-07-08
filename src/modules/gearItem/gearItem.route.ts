@@ -7,5 +7,7 @@ const router = Router();
 
 // item create api
 router.post("/gear",auth(Role.PROVIDER),gearItemsController.createGearItem);
+// item update api
+router.put("/:id", auth(Role.PROVIDER) ,gearItemsController.updateGearItem);
 
 export const gearItemRoute = router;

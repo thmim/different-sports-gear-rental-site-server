@@ -35,5 +35,6 @@ app.use("/api",categoriesRoute);
 
 // gear items create rote
 app.use("/api/provider",gearItemRoute);
+app.use("/api/provider/gear",gearItemRoute);
 
 export default app;

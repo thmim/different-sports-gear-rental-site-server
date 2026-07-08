@@ -1,16 +1,16 @@
 import { prisma } from "../../lib/prisma";
-import { IGearItems } from "./gearItem.interface"
+import { IGearItems, IUpdateItems } from "./gearItem.interface"
 
 const createGearItemIntoDb = async (payload:IGearItems,id:string)=>{
-   const {name,description,category_id,brand,daily_price,quantity} = payload;
+   const {name,description,category_id,brand,daily_price,quantity,product_image = "Not provided",condition} = payload;
    const provider_id = id;
-   console.log(provider_id)
+   
 
-//    const isCategoryExist = await prisma.categories.findUniqueOrThrow({
-//     where:{
-//         id:category_id
-//     }
-//    })
+   const isCategoryExist = await prisma.categories.findUniqueOrThrow({
+    where:{
+        id:category_id
+    }
+   })
 
    const createGearItem = await prisma.gearitems.create({
     data:{
@@ -18,7 +18,9 @@ const createGearItemIntoDb = async (payload:IGearItems,id:string)=>{
         description,
         category_id,
         provider_id,
+        product_image,
         brand,
+        condition:condition,
         daily_price:daily_price ,
         quantity
     }
@@ -28,6 +30,36 @@ const createGearItemIntoDb = async (payload:IGearItems,id:string)=>{
    
 }
 
+// update item
+const updateGearItemFromDb = async (payload:IUpdateItems,item_id:string,provider_id:string)=>{
+      const item = await prisma.gearitems.findUniqueOrThrow({
+        where: {
+            id: item_id
+        }
+    })
+    if ( provider_id !== item.provider_id) {
+        throw new Error("you are not the owner of this item")
+    }
+    const result = await prisma.gearitems.update({
+        where: {
+            id: item_id
+        },
+        data: payload,
+        include: {
+            provider: {
+                omit: {
+                    password: true
+                }
+            },
+            
+        }
+        
+    })
+    return result;
+
+}
+
 export const gearItemsServices = {
-    createGearItemIntoDb
+    createGearItemIntoDb,
+    updateGearItemFromDb
 }
