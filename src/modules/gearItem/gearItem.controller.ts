@@ -19,7 +19,6 @@ const createGearItem = catchAsync(async (req: Request, res: Response, next: Next
 })
 
 // update controller
-
 const updateGearItem = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
     const item_id = req.params.id;
     const payload = req.body;
@@ -39,9 +38,29 @@ const updateGearItem = catchAsync(async(req:Request,res:Response,next:NextFuncti
     })
 })
 
+// delete item 
+const deleteGearItem = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+    const item_id = req.params.id;
+    const provider_id = req.user?.id;
+   const isAdmin = req.user?.role === "ADMIN";
+
+//    j gear rent deya hoye gece oita delete kora jabe na aita iplement korte hobe must pore
+
+   await gearItemsServices.deleteGearItemFromDb(item_id as string,provider_id as string,isAdmin);
+
+   sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Gear Item deleted successfully",
+        data: null
+    })
+
+})
+
 
 
 export const gearItemsController = {
     createGearItem,
-    updateGearItem
+    updateGearItem,
+    deleteGearItem
 }

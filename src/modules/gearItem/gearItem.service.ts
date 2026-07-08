@@ -59,7 +59,28 @@ const updateGearItemFromDb = async (payload:IUpdateItems,item_id:string,provider
 
 }
 
+// delete gear item
+const deleteGearItemFromDb = async (itemId:string,providerId:string,isAdmin:boolean)=>{
+    const item = await prisma.gearitems.findUniqueOrThrow({
+        where:{
+            id:itemId
+        }
+    })
+
+    if(!isAdmin && providerId !== item.provider_id){
+        throw new Error("You don't have access to delete this item")
+    }
+
+    await prisma.gearitems.delete({
+        where:{
+            id:itemId
+        }
+    })
+     
+}
+
 export const gearItemsServices = {
     createGearItemIntoDb,
-    updateGearItemFromDb
+    updateGearItemFromDb,
+    deleteGearItemFromDb
 }

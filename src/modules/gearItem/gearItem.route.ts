@@ -9,5 +9,6 @@ const router = Router();
 router.post("/gear",auth(Role.PROVIDER),gearItemsController.createGearItem);
 // item update api
 router.put("/:id", auth(Role.PROVIDER) ,gearItemsController.updateGearItem);
+router.delete("/:id", auth(Role.PROVIDER,Role.ADMIN) ,gearItemsController.deleteGearItem);
 
 export const gearItemRoute = router;
