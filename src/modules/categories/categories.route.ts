@@ -8,4 +8,7 @@ const router = Router();
 // create category route
 router.post("/categories",auth(Role.ADMIN),categoriesController.createCategories);
 
+// get all category
+router.get("/categories",categoriesController.getAllCategories);
+
 export const categoriesRoute = router;

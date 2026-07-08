@@ -7,6 +7,9 @@ const router = Router();
 
 // register api
 router.post("/register",userController.createUser);
+
+// get all user by admin
+router.get("/users",auth(Role.ADMIN),userController.getAllUser);
 // get me
 router.get("/me",auth(Role.ADMIN,Role.PROVIDER,Role.CUSTOMER),userController.getMe);
 

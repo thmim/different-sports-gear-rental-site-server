@@ -31,6 +31,13 @@ const createUserIntoDb = async (payload: RegisterUserPayload) => {
     return createUser;
 }
 
+// get all users by admin
+const getAllUserFromDb = async ()=>{
+   const allUser = await prisma.users.findMany() ;
+   return allUser; 
+
+}
+
 // get me service
 const getMeFromDb = async(userId:string)=>{
     const user = await prisma.users.findUniqueOrThrow({
@@ -64,5 +71,6 @@ const updateUserFromDb = async(userId:string,payload:any) =>{
 export const userServices = {
     createUserIntoDb,
     getMeFromDb,
-    updateUserFromDb
+    updateUserFromDb,
+    getAllUserFromDb
 }

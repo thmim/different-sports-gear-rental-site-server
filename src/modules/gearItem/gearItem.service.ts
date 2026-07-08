@@ -30,6 +30,18 @@ const createGearItemIntoDb = async (payload:IGearItems,id:string)=>{
    
 }
 
+// get all gear item by admin
+const getAllGearFromDb = async ()=>{
+   const allGear = await prisma.gearitems.findMany() ;
+   return allGear; 
+
+}
+
+// get gear details by id
+const getGearDetailsFromDb = async ()=>{
+   
+}
+
 // update item
 const updateGearItemFromDb = async (payload:IUpdateItems,item_id:string,provider_id:string)=>{
       const item = await prisma.gearitems.findUniqueOrThrow({
@@ -82,5 +94,6 @@ const deleteGearItemFromDb = async (itemId:string,providerId:string,isAdmin:bool
 export const gearItemsServices = {
     createGearItemIntoDb,
     updateGearItemFromDb,
-    deleteGearItemFromDb
+    deleteGearItemFromDb,
+    getAllGearFromDb
 }

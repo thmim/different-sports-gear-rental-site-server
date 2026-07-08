@@ -23,6 +23,13 @@ const createCategoriesIntoDb = async(payload:Icategories)=>{
    return createCategory;
 }
 
+// get all categories 
+const getAllCategoriesFromDb = async()=>{
+ const allCategories = await prisma.categories.findMany() ;
+   return allCategories; 
+}
+
 export const categoriesServices = {
-    createCategoriesIntoDb
+    createCategoriesIntoDb,
+    getAllCategoriesFromDb
 }

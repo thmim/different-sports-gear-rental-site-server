@@ -9,6 +9,11 @@ const router = Router();
 router.post("/gear",auth(Role.PROVIDER),gearItemsController.createGearItem);
 // item update api
 router.put("/:id", auth(Role.PROVIDER) ,gearItemsController.updateGearItem);
+// item delete api
 router.delete("/:id", auth(Role.PROVIDER,Role.ADMIN) ,gearItemsController.deleteGearItem);
+
+// get all gear by admin
+router.get("/gear",auth(Role.ADMIN),gearItemsController.getAllGearItem);
+
 
 export const gearItemRoute = router;

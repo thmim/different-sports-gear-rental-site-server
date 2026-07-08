@@ -20,6 +20,18 @@ sendResponse(res,{
 
 })
 
+// get all user by admin
+const getAllUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const result = await userServices.getAllUserFromDb();
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"All User retrived successfully",
+        data:result
+    })
+
+})
+
 // get me controller
 const getMe = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
   
@@ -51,5 +63,6 @@ const updateUser = catchAsync(async(req:Request,res:Response,next:NextFunction)=
 export const userController = {
     createUser,
     getMe,
-    updateUser
+    updateUser,
+    getAllUser
 }

@@ -18,6 +18,24 @@ const createGearItem = catchAsync(async (req: Request, res: Response, next: Next
 
 })
 
+// get all gear by admin
+const getAllGearItem = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const result = await gearItemsServices.getAllGearFromDb();
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"Gear Item retrived successfully",
+        data:result
+    })
+
+})
+
+// get gear details by id
+const getGearDetails = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  
+
+})
+
 // update controller
 const updateGearItem = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
     const item_id = req.params.id;
@@ -62,5 +80,7 @@ const deleteGearItem = catchAsync(async(req:Request,res:Response,next:NextFuncti
 export const gearItemsController = {
     createGearItem,
     updateGearItem,
-    deleteGearItem
+    deleteGearItem,
+    getAllGearItem,
+    getGearDetails
 }
