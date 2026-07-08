@@ -32,7 +32,16 @@ const getAllGearItem = catchAsync(async (req: Request, res: Response, next: Next
 
 // get gear details by id
 const getGearDetails = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id;
   
+  const result = await gearItemsServices.getGearDetailsFromDb(id as string);
+
+  sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"Gear details retrived successfully",
+        data:result
+    })
 
 })
 

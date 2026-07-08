@@ -38,8 +38,13 @@ const getAllGearFromDb = async ()=>{
 }
 
 // get gear details by id
-const getGearDetailsFromDb = async ()=>{
-   
+const getGearDetailsFromDb = async (gearId:string)=>{
+   const singleGearDetails = await prisma.gearitems.findUniqueOrThrow({
+    where:{
+        id:gearId
+    }
+   })
+   return singleGearDetails;
 }
 
 // update item
@@ -95,5 +100,6 @@ export const gearItemsServices = {
     createGearItemIntoDb,
     updateGearItemFromDb,
     deleteGearItemFromDb,
-    getAllGearFromDb
+    getAllGearFromDb,
+    getGearDetailsFromDb
 }
