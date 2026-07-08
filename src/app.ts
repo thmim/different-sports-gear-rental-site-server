@@ -6,6 +6,7 @@ import { userRouter } from "./modules/user/user.route";
 import { authRoute } from "./modules/auth/auth.route";
 import { categoriesRoute } from "./modules/categories/categories.route";
 import { gearItemRoute } from "./modules/gearItem/gearItem.route";
+import { rentalOrderRoute } from "./modules/rentorder/rentOrder.route";
 const app:Application = express();
 
 app.use(cors({
@@ -42,5 +43,8 @@ app.use("/api/admin",gearItemRoute);
 app.use("/api/admin",userRouter);
 // get single gear
 app.use("/api/gear",gearItemRoute);
+
+// rental order
+app.use("/api",rentalOrderRoute);
 
 export default app;
