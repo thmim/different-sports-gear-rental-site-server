@@ -1,8 +1,10 @@
+import { JwtPayload } from "jsonwebtoken";
 import { Prisma } from "../../../generated/prisma/browser";
 import { prisma } from "../../lib/prisma";
+import { paymentServices } from "../payments/payment.service";
 import { ICreateRentalOrderInput } from "./rentOrder.interface"
 
-const createOrderIntoDb = async (payload: ICreateRentalOrderInput, customerId: string) => {
+const createOrderIntoDb = async (payload: ICreateRentalOrderInput, customer: JwtPayload) => {
 
     const gearItem = await prisma.gearitems.findUniqueOrThrow({
         where: {
@@ -28,7 +30,7 @@ const createOrderIntoDb = async (payload: ICreateRentalOrderInput, customerId: s
     const newOrder = await prisma.rentalOrder.create({
         data: {
             gearItem_id: payload.gearItem_id,
-            customer_id: customerId,
+            customer_id: customer.id,
             start_date: startDate,
             end_date: endDate,
             total_amount: new Prisma.Decimal(calculatedTotalAmount),
@@ -42,7 +44,8 @@ const createOrderIntoDb = async (payload: ICreateRentalOrderInput, customerId: s
             }
         }
     });
-    return newOrder;
+    const paymentUrl = await paymentServices.initiatePayment(newOrder,customer)
+    return {newOrder,paymentUrl};
 }
 
 // get all rentals order for admin

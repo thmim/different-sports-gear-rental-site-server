@@ -10,6 +10,7 @@ model Users {
     gearItems    Gearitems[]
     reviews      Reviews[]
     rentalOrders RentalOrder[]
+    payments     Payments[]
 
     @@map("users")
 }

@@ -12,4 +12,6 @@ export default {
     jwt_refresh_secret:process.env.JWT_REFRESH_SECRET!,
     jwt_access_expires:process.env.JWT_ACCESS_EXPIRES,
     jwt_refresh_expires:process.env.JWT_REFRESH_EXPIRES,
+    sslc_stored_id:process.env.SSLC_STORED_ID,
+    sslc_stored_password:process.env.SSLC_STORED_PASSWORD
 }

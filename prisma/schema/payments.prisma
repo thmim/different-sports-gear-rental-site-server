@@ -1,0 +1,16 @@
+model Payments {
+    id             String        @id @default(uuid())
+    rentalOrder    RentalOrder   @relation(fields: [rentalOrder_id], references: [id])
+    rentalOrder_id String        @unique
+    customer       Users         @relation(fields: [customer_id], references: [id])
+    customer_id    String
+    amount         Decimal       @db.Decimal(10, 2)
+    transaction_id String?       @unique
+    status         PaymentStatus @default(PENDING)
+    currency       String        @default("usd")
+    paid_at        DateTime?
+    created_at     DateTime      @default(now())
+    updated_at     DateTime      @updatedAt
+
+    @@map("payments")
+}

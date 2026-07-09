@@ -7,6 +7,7 @@ import { authRoute } from "./modules/auth/auth.route";
 import { categoriesRoute } from "./modules/categories/categories.route";
 import { gearItemRoute } from "./modules/gearItem/gearItem.route";
 import { rentalOrderRoute } from "./modules/rentorder/rentOrder.route";
+import { paymentRoute } from "./modules/payments/payments.route";
 const app:Application = express();
 
 app.use(cors({
@@ -47,6 +48,7 @@ app.use("/api/gear",gearItemRoute);
 // rental order
 app.use("/api",rentalOrderRoute);
 app.use("/api/rentals",rentalOrderRoute);
+app.use("/api/payment",paymentRoute);
 app.use("/api/provider",rentalOrderRoute);
 
 export default app;
