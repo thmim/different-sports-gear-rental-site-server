@@ -21,6 +21,34 @@ sendResponse(res,{
 })
 })
 
+// get all rental order for admin
+const getAllRentalOrder = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+   
+    const result = await rentalOrderServices.getAllRentalOrderFromDb();
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"All Rental Order retrived successfully",
+        data:result
+    })
+
+})
+
+// get rental order for provider own gear
+const getRentalOrder = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+    const provider_id = req.user?.id;
+    const result = await rentalOrderServices.getRentalOrderFromDb(provider_id as string);
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"Get own gear rental order successfully",
+        data:result
+    })
+
+})
+
 export const rentalOrderController = {
-    createOrder
+    createOrder,
+    getAllRentalOrder,
+    getRentalOrder
 }

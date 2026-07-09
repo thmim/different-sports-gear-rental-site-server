@@ -34,7 +34,7 @@ app.use("/api/admin/users",userRouter);
 // create category by admin  and get categories by customer
 app.use("/api",categoriesRoute);
 
-// gear items create rote
+// gear items create route
 app.use("/api/provider",gearItemRoute);
 
 app.use("/api/provider/gear",gearItemRoute);
@@ -46,5 +46,7 @@ app.use("/api/gear",gearItemRoute);
 
 // rental order
 app.use("/api",rentalOrderRoute);
+app.use("/api/rentals",rentalOrderRoute);
+app.use("/api/provider",rentalOrderRoute);
 
 export default app;

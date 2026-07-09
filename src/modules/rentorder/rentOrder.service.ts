@@ -45,6 +45,56 @@ const createOrderIntoDb = async (payload: ICreateRentalOrderInput, customerId: s
     return newOrder;
 }
 
+// get all rentals order for admin
+const getAllRentalOrderFromDb = async () => {
+
+    const allRentalOrder = await prisma.rentalOrder.findMany({
+        include: {
+            customer: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+            gearItem: {
+                select: {
+                    id: true,
+                    name: true,
+                    daily_price: true,
+                },
+            },
+        },
+    });
+    return allRentalOrder;
+}
+
+// get rental order for user own gear
+const getRentalOrderFromDb = async (providerId: string) => {
+    const ownOrder = await prisma.rentalOrder.findMany({
+        where: {
+            gearItem: {
+                provider_id: providerId
+            }
+        },
+        include: { 
+            gearItem:{
+                select: {
+                    name: true,
+                    daily_price: true,
+                    brand:true,
+                    description:true
+                },
+            }
+         }
+    })
+    return ownOrder;
+
+
+}
+
 export const rentalOrderServices = {
-    createOrderIntoDb
+    createOrderIntoDb,
+    getAllRentalOrderFromDb,
+    getRentalOrderFromDb
 }
