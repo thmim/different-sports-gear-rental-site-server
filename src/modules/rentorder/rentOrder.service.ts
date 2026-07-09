@@ -103,6 +103,7 @@ const getAllRentalOrderDetailsFromDb = async (orderId: string, userId: string, r
     }
   
 });
+return order;
 }
 
 // get rental order for user own gear
