@@ -72,6 +72,39 @@ const getAllRentalOrderFromDb = async () => {
     return allRentalOrder;
 }
 
+// get rental order details
+const getAllRentalOrderDetailsFromDb = async (orderId: string, userId: string, role: string) =>{
+    const order = await prisma.rentalOrder.findUniqueOrThrow({
+    where: {
+      id: orderId,
+      // সিকিউরিটি চেক: 
+      // যদি ইউজার CUSTOMER হয়, তবে চেক করবে customer_id === userId
+      // যদি ইউজার PROVIDER হয়, তবে গিয়ারের ভেতরের provider_id === userId হতে হবে
+      OR: [
+        { customer_id: userId },
+        {
+          gearItem: {
+            provider_id: userId
+          }
+        }
+      ]
+    },
+    include: {
+      gearItem: {
+        include: {
+          provider: { // প্রোভাইডারের বেসিক তথ্য (পাসওয়ার্ড ছাড়া)
+            omit: { password: true }
+          }
+        }
+      },
+      customer: { // কাস্টমারের বেসিক তথ্য (পাসওয়ার্ড ছাড়া)
+        omit: { password: true }
+      }
+    }
+  
+});
+}
+
 // get rental order for user own gear
 const getRentalOrderFromDb = async (providerId: string) => {
     const ownOrder = await prisma.rentalOrder.findMany({
@@ -99,5 +132,6 @@ const getRentalOrderFromDb = async (providerId: string) => {
 export const rentalOrderServices = {
     createOrderIntoDb,
     getAllRentalOrderFromDb,
-    getRentalOrderFromDb
+    getRentalOrderFromDb,
+    getAllRentalOrderDetailsFromDb
 }

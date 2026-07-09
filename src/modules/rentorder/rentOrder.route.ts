@@ -11,4 +11,7 @@ router.get("/order",auth(Role.ADMIN),rentalOrderController.getAllRentalOrder);
 // for provider own gear order
 router.get("/own/orders",auth(Role.PROVIDER),rentalOrderController.getRentalOrder);
 
+// provider and customer can see rental order details
+router.get("/:id",rentalOrderController.getRentalOrderDetails)
+
 export const rentalOrderRoute = router;

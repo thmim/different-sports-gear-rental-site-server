@@ -49,8 +49,29 @@ const getRentalOrder = catchAsync(async(req:Request,res:Response,next:NextFuncti
 
 })
 
+// get rental details
+const getRentalOrderDetails = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+    const orderId = req.params.id;
+    const userId = req.user?.id;
+    const role = req.user?.role;
+
+    if (!userId) {
+      throw new Error("please login")
+    }
+
+    const result = await rentalOrderServices.getAllRentalOrderDetailsFromDb(orderId as string, userId, role as string);
+
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"Get own gear rental order details successfully",
+        data:result
+    })
+});
+
 export const rentalOrderController = {
     createOrder,
     getAllRentalOrder,
-    getRentalOrder
+    getRentalOrder,
+    getRentalOrderDetails
 }

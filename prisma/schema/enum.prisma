@@ -15,6 +15,7 @@ enum RentalStatus {
     ACTIVE
     RETURNED
     CANCELLED
+    CONFIRMED
 }
 
 enum ProductCondition {

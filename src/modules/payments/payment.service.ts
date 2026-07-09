@@ -44,8 +44,8 @@ const initiatePayment = async (order: RentalOrder, user: JwtPayload) => {
       rentalOrder_id: order.id,
       customer_id: order.customer_id,
       amount: order.total_amount,
-      currency:data.currency,
-      paid_at:paid_at
+      
+      // paid_at:paid_at
     },
   });
    
@@ -54,39 +54,193 @@ const initiatePayment = async (order: RentalOrder, user: JwtPayload) => {
     return GatewayPageURL;
 };
 
+// const validatePayment = async (
+//   orderId: string,
+//   tranId: string,
+//   status: string,
+//   payload: Record<string, unknown>,
+// ) => {
+//   const response = await axios.post(
+//     `https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?val_id=${payload.val_id}&store_id=${config.sslc_stored_id}&store_passwd=${config.sslc_stored_password}&format=json`,
+
+//     {
+//       headers: { "Content-Type": "application/x-www-form-urlencoded" },
+//     },
+//   );
+
+//   // console.log("response theke",response)
+//   const data = response.data;
+//   if (data.status === "VALID") {
+//     await prisma.rentalOrder.update({
+//       where: { id: orderId },
+//       data: {
+//         status: "ACTIVE",
+//       },
+//     });
+//     // decrese quantity after rent
+//     await prisma.payments.update({
+//       where: { transaction_id:tranId },
+//       data: {
+//         status: "COMPLETED",
+//         // paid_at:paid_at
+//         currency:data.currency,
+        
+//       },
+//     });
+// }else if (
+//     data.status === "FAILED" ||
+//     data.status === "INVALID_TRANSACTION"
+//   ) {
+//     await prisma.rentalOrder.update({
+//       where: { id: orderId },
+//       data: {
+//         status: "CANCELLED",
+//       },
+//     });
+//     await prisma.payments.update({
+//       where: { transaction_id:tranId },
+//       data: {
+//         status: "FAILED",
+       
+//       },
+//     });
+// return status;
+// };
+// }
+
 const validatePayment = async (
   orderId: string,
   tranId: string,
   status: string,
-  payload: Record<string, unknown>,
+  payload: Record<string, any>,
 ) => {
   const response = await axios.post(
     `https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?val_id=${payload.val_id}&store_id=${config.sslc_stored_id}&store_passwd=${config.sslc_stored_password}&format=json`,
-
+    {},
     {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
   );
 
-  console.log("response theke",response)
   const data = response.data;
+
+  // Find payment
+  const payment = await prisma.payments.findUnique({
+    where: {
+      transaction_id: tranId,
+    },
+  });
+
+  if (!payment) {
+    throw new Error("Payment not found.");
+  }
+
+  // Prevent duplicate callback
+  if (payment.status === "COMPLETED") {
+    return {
+      success: true,
+      message: "Payment already processed.",
+    };
+  }
+
+  // Find rental order with gear
+  const rental = await prisma.rentalOrder.findUnique({
+    where: {
+      id: orderId,
+    },
+    include: {
+      gearItem: true,
+    },
+  });
+
+  if (!rental) {
+    throw new Error("Rental order not found.");
+  }
+
   if (data.status === "VALID") {
-    await prisma.rentalOrder.update({
-      where: { id: orderId },
-      data: {
-        status: "ACTIVE",
-      },
+    await prisma.$transaction(async (tx) => {
+      // Prevent negative quantity
+      if (rental.gearItem.quantity <= 0) {
+        throw new Error("Gear is out of stock.");
+      }
+
+      const updatedQuantity = Number(rental.gearItem.quantity) - 1;
+
+      // Update rental
+      await tx.rentalOrder.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          status: "CONFIRMED",
+        },
+      });
+
+      // Update payment
+      await tx.payments.update({
+        where: {
+          transaction_id: tranId,
+        },
+        data: {
+          status: "COMPLETED",
+          currency: data.currency,
+          paid_at: new Date(),
+        },
+      });
+
+      // Update gear
+      await tx.gearitems.update({
+        where: {
+          id: rental.gearItem.id,
+        },
+        data: {
+          quantity: updatedQuantity,
+          is_available: updatedQuantity > 0,
+        },
+      });
     });
-    // decrese quantity after rent
-    await prisma.payments.update({
-      where: { transaction_id:tranId },
-      data: {
-        status: "COMPLETED",
-        
-      },
+
+    return {
+      success: true,
+      message: "Payment successful.",
+    };
+  }
+
+  if (
+    data.status === "FAILED" ||
+    data.status === "INVALID_TRANSACTION"
+  ) {
+    await prisma.$transaction(async (tx) => {
+      await tx.rentalOrder.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      });
+
+      await tx.payments.update({
+        where: {
+          transaction_id: tranId,
+        },
+        data: {
+          status: "FAILED",
+        },
+      });
     });
-}
-}
+
+    return {
+      success: false,
+      message: "Payment failed.",
+    };
+  }
+
+  return status;
+ 
+};
 
 export const paymentServices = {
     initiatePayment,
