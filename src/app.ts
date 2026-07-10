@@ -9,6 +9,8 @@ import { gearItemRoute } from "./modules/gearItem/gearItem.route";
 import { rentalOrderRoute } from "./modules/rentorder/rentOrder.route";
 import { paymentRoute } from "./modules/payments/payments.route";
 import { reviewRoute } from "./modules/review/review.route";
+import { notFound } from "./middleware/notFound";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
 const app:Application = express();
 
 app.use(cors({
@@ -55,5 +57,11 @@ app.use("/api/provider",rentalOrderRoute);
 app.use("/api/provider/orders",rentalOrderRoute);
 // review post
 app.use("/api",reviewRoute);
+
+// route not found error handler middleware
+app.use(notFound);
+
+// global error handler
+app.use(globalErrorHandler);
 
 export default app;
