@@ -69,9 +69,29 @@ const getRentalOrderDetails = catchAsync(async(req:Request,res:Response,next:Nex
     })
 });
 
+// update rental order status through provider
+const updateRentalOrderstatus = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+    const rentalOrder_id = req.params.id;
+    const user = req.user;
+    const {status} = req.body;
+  
+    if(!user){
+        throw new Error("You have to login")
+    }
+
+    const result = await rentalOrderServices.updateRentalOrderStatusFromDb(rentalOrder_id as string,status,user);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Rental status updated successfully.",
+        data: result,
+    });
+})
+
 export const rentalOrderController = {
     createOrder,
     getAllRentalOrder,
     getRentalOrder,
-    getRentalOrderDetails
+    getRentalOrderDetails,
+    updateRentalOrderstatus
 }

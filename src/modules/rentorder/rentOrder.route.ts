@@ -14,4 +14,7 @@ router.get("/own/orders",auth(Role.PROVIDER),rentalOrderController.getRentalOrde
 // provider and customer can see rental order details
 router.get("/:id",auth(Role.CUSTOMER,Role.PROVIDER) ,rentalOrderController.getRentalOrderDetails);
 
+// update rental order status through provider
+router.patch("/:id", auth(Role.PROVIDER),rentalOrderController.updateRentalOrderstatus);
+
 export const rentalOrderRoute = router;

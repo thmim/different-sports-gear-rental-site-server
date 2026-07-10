@@ -14,9 +14,9 @@ const verifyPayment = catchAsync(async (req:Request, res:Response) => {
   );
 
   if (response === "success") {
-    res.redirect("https://linkedin.com");
-  } else if (response === "fail") {
     res.redirect("https://www.facebook.com");
+  } else if (response === "fail") {
+    res.redirect("https://www.programming-hero.com/");
   } else if (response === "cancel") res.redirect("https://www.youtube.com");
   
 });

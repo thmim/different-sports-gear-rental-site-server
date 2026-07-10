@@ -1,5 +1,5 @@
 import { JwtPayload } from "jsonwebtoken";
-import { Prisma } from "../../../generated/prisma/browser";
+import { Prisma, RentalStatus } from "../../../generated/prisma/browser";
 import { prisma } from "../../lib/prisma";
 import { paymentServices } from "../payments/payment.service";
 import { ICreateRentalOrderInput } from "./rentOrder.interface"
@@ -44,8 +44,8 @@ const createOrderIntoDb = async (payload: ICreateRentalOrderInput, customer: Jwt
             }
         }
     });
-    const paymentUrl = await paymentServices.initiatePayment(newOrder,customer)
-    return {newOrder,paymentUrl};
+    const paymentUrl = await paymentServices.initiatePayment(newOrder, customer)
+    return { newOrder, paymentUrl };
 }
 
 // get all rentals order for admin
@@ -73,37 +73,35 @@ const getAllRentalOrderFromDb = async () => {
 }
 
 // get rental order details
-const getAllRentalOrderDetailsFromDb = async (orderId: string, userId: string, role: string) =>{
+const getAllRentalOrderDetailsFromDb = async (orderId: string, userId: string, role: string) => {
     const order = await prisma.rentalOrder.findUniqueOrThrow({
-    where: {
-      id: orderId,
-      // সিকিউরিটি চেক: 
-      // যদি ইউজার CUSTOMER হয়, তবে চেক করবে customer_id === userId
-      // যদি ইউজার PROVIDER হয়, তবে গিয়ারের ভেতরের provider_id === userId হতে হবে
-      OR: [
-        { customer_id: userId },
-        {
-          gearItem: {
-            provider_id: userId
-          }
-        }
-      ]
-    },
-    include: {
-      gearItem: {
+        where: {
+            id: orderId,
+
+            OR: [
+                { customer_id: userId },
+                {
+                    gearItem: {
+                        provider_id: userId
+                    }
+                }
+            ]
+        },
         include: {
-          provider: { // প্রোভাইডারের বেসিক তথ্য (পাসওয়ার্ড ছাড়া)
-            omit: { password: true }
-          }
+            gearItem: {
+                include: {
+                    provider: {
+                        omit: { password: true }
+                    }
+                }
+            },
+            customer: {
+                omit: { password: true }
+            }
         }
-      },
-      customer: { // কাস্টমারের বেসিক তথ্য (পাসওয়ার্ড ছাড়া)
-        omit: { password: true }
-      }
-    }
-  
-});
-return order;
+
+    });
+    return order;
 }
 
 // get rental order for user own gear
@@ -114,19 +112,93 @@ const getRentalOrderFromDb = async (providerId: string) => {
                 provider_id: providerId
             }
         },
-        include: { 
-            gearItem:{
+        include: {
+            gearItem: {
                 select: {
                     name: true,
                     daily_price: true,
-                    brand:true,
-                    description:true
+                    brand: true,
+                    description: true
                 },
             }
-         }
+        }
     })
     return ownOrder;
 
+
+}
+
+// update rental order status through provider
+const updateRentalOrderStatusFromDb = async (
+    rentalId: string,
+    status: RentalStatus,
+    user: JwtPayload
+) => {
+
+      const rental = await prisma.rentalOrder.findUnique({
+        where: {
+            id: rentalId,
+        },
+        include: {
+            gearItem: true,
+        },
+    });
+     
+
+    if (!rental) {
+        throw new Error("Rental order not found.");
+    }
+    
+
+     if (rental.gearItem.provider_id !== user.id) {
+            throw new Error("You can update only your own rental orders.");
+        }
+
+    // if status is confirmed then update it only in active
+    if (
+        rental.status === "CONFIRMED" &&
+        status !== "ACTIVE"
+    ) {
+        throw new Error("Only ACTIVE is allowed.");
+    }
+    // if status is active then update it only in returned
+
+    if (
+        rental.status === "ACTIVE" &&
+        status !== "RETURNED"
+    ) {
+        throw new Error("Only COMPLETED is allowed.");
+    }
+
+    return await prisma.$transaction(async (tx) => {
+
+        const updatedRental = await tx.rentalOrder.update({
+            where: {
+                id: rentalId,
+            },
+            data: {
+                status:status,
+            },
+        });
+
+        // Gear returned
+        if (status === "RETURNED") {
+
+            const updatedQuantity =
+                Number(rental.gearItem.quantity) + 1;
+
+            await tx.gearitems.update({
+                where: {
+                    id: rental.gearItem.id,
+                },
+                data: {
+                    quantity: updatedQuantity,
+                    is_available: true,
+                },
+            });
+        }
+return updatedRental;
+});
 
 }
 
@@ -134,5 +206,6 @@ export const rentalOrderServices = {
     createOrderIntoDb,
     getAllRentalOrderFromDb,
     getRentalOrderFromDb,
-    getAllRentalOrderDetailsFromDb
+    getAllRentalOrderDetailsFromDb,
+    updateRentalOrderStatusFromDb
 }
