@@ -44,8 +44,11 @@ app.use("/api/provider",gearItemRoute);
 app.use("/api/provider/gear",gearItemRoute);
 app.use("/api/admin",gearItemRoute);
 
+// get all user
 app.use("/api/admin",userRouter);
-// get single gear
+// get single gear using id to see details
+app.use("/api/gear/users",gearItemRoute);
+// get all gear for everyone
 app.use("/api/gear",gearItemRoute);
 
 // rental order

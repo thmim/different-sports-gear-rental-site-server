@@ -54,59 +54,6 @@ const initiatePayment = async (order: RentalOrder, user: JwtPayload) => {
     return GatewayPageURL;
 };
 
-// const validatePayment = async (
-//   orderId: string,
-//   tranId: string,
-//   status: string,
-//   payload: Record<string, unknown>,
-// ) => {
-//   const response = await axios.post(
-//     `https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?val_id=${payload.val_id}&store_id=${config.sslc_stored_id}&store_passwd=${config.sslc_stored_password}&format=json`,
-
-//     {
-//       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-//     },
-//   );
-
-//   // console.log("response theke",response)
-//   const data = response.data;
-//   if (data.status === "VALID") {
-//     await prisma.rentalOrder.update({
-//       where: { id: orderId },
-//       data: {
-//         status: "ACTIVE",
-//       },
-//     });
-//     // decrese quantity after rent
-//     await prisma.payments.update({
-//       where: { transaction_id:tranId },
-//       data: {
-//         status: "COMPLETED",
-//         // paid_at:paid_at
-//         currency:data.currency,
-        
-//       },
-//     });
-// }else if (
-//     data.status === "FAILED" ||
-//     data.status === "INVALID_TRANSACTION"
-//   ) {
-//     await prisma.rentalOrder.update({
-//       where: { id: orderId },
-//       data: {
-//         status: "CANCELLED",
-//       },
-//     });
-//     await prisma.payments.update({
-//       where: { transaction_id:tranId },
-//       data: {
-//         status: "FAILED",
-       
-//       },
-//     });
-// return status;
-// };
-// }
 
 const validatePayment = async (
   orderId: string,
