@@ -7,7 +7,7 @@ GearUp is a backend REST API for a sports and outdoor equipment rental platform.
 > Add your deployed backend URL here
 
 ```
-https://your-api-url.com
+https://sports-gear-rental-site-server.vercel.app/
 ```
 
 ---
