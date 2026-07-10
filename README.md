@@ -371,5 +371,4 @@ src
 
 **Md Taharim Hasan Mim**
 
-- GitHub: https://github.com/your-username
-- LinkedIn: https://linkedin.com/in/your-profile
+
