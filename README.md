@@ -1,23 +1,11 @@
-# 🚴 GearUp - Sports & Outdoor Equipment Rental API
+# 🚴 GearUp - Sports & Outdoor Equipment Rental Site Backend
 
-GearUp is a backend REST API for a sports and outdoor equipment rental platform. It allows customers to rent sports gear, providers to manage their equipment, and admins to oversee the entire platform.
+GearUp is a backend project for a sports and outdoor equipment rental platform. It allows customers to rent sports gear, providers to manage their equipment, and admins to oversee the entire platform.
 
 ## 🚀 Live API
 
-> Add your deployed backend URL here
-
 ```
 https://sports-gear-rental-site-server.vercel.app/
-```
-
----
-
-## 📂 GitHub Repository
-
-> Add your GitHub repository link here
-
-```
-https://github.com/your-username/gearup-backend
 ```
 
 ---
@@ -43,7 +31,7 @@ https://github.com/your-username/gearup-backend
 - User Registration
 - User Login
 - JWT Authentication
-- Get Current User
+- Get Current User By Admin
 - Role-based Authorization
 
 ### Customer Features
@@ -177,7 +165,7 @@ Rental Status = ACTIVE
 Customer Returns Gear
       │
       ▼
-Rental Status = COMPLETED
+Rental Status = RETURNED
 ```
 
 ---
@@ -218,21 +206,25 @@ npm install
 Create a `.env` file
 
 ```env
-DATABASE_URL=
-
-JWT_SECRET=
-
-BCRYPT_SALT_ROUNDS=
-
-SSLC_STORE_ID=
-
-SSLC_STORE_PASSWORD=
-
-SSLC_PAYMENT_API=
-
-SSLC_VALIDATION_API=
-
 PORT=
+
+APP_URL=
+
+BCRYPT_SALT_ROUND=
+
+JWT_ACCESS_SECRET=
+
+JWT_REFRESH_SECRET=
+
+JWT_ACCESS_EXPIRES=
+
+JWT_REFRESH_EXPIRES=
+
+SSLC_STORED_ID=
+
+SSLC_STORED_PASSWORD=
+
+DATABASE_URL=
 ```
 
 Generate Prisma Client
@@ -345,7 +337,7 @@ Authorization: Bearer <access_token>
 ```
 src
 │
-├── app
+├── |
 │   ├── modules
 │   │   ├── auth
 │   │   ├── users
@@ -359,16 +351,22 @@ src
 │   ├── routes
 │   ├── utils
 │   └── config
+│   └── lib
 │
-├── prisma
+├── app.ts
 │
 └── server.ts
 ```
 
 ---
+## 📁 Admin Credential
+email:messi10@gmail.com
+password:messi10
 
 ## 👨‍💻 Author
 
 **Md Taharim Hasan Mim**
+## 👨‍💻 Linkedin: https://www.linkedin.com/in/th-mim10/
+## 👨‍💻 Portfolio: [https://www.linkedin.com/in/th-mim10/](https://taharim-hasan.vercel.app/)
 
 
