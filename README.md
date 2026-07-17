@@ -7,6 +7,11 @@ GearUp is a backend project for a sports and outdoor equipment rental platform. 
 ```
 https://sports-gear-rental-site-server.vercel.app/
 ```
+## 🚀 Postman Collection
+
+```
+https://documenter.getpostman.com/view/45092075/2sBY4LRMfv
+```
 
 ---
 
@@ -360,8 +365,8 @@ src
 
 ---
 ## 📁 Admin Credential
-email:messi10@gmail.com
-password:messi10
+email: messi10@gmail.com
+ password: messi10
 
 ## 👨‍💻 Author
 
