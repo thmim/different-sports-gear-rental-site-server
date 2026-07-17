@@ -367,6 +367,6 @@ password:messi10
 
 **Md Taharim Hasan Mim**
 ## 👨‍💻 Linkedin: https://www.linkedin.com/in/th-mim10/
-## 👨‍💻 Portfolio: [https://www.linkedin.com/in/th-mim10/](https://taharim-hasan.vercel.app/)
+## 👨‍💻 Portfolio: (https://taharim-hasan.vercel.app/)
 
 
