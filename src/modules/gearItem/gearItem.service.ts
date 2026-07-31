@@ -45,7 +45,11 @@ const getGearDetailsFromDb = async (gearId: string) => {
         },
         include: {
             category: true,
-            provider: true
+            provider: {
+                omit:{
+                    password:true
+                }
+            }
         }
     })
     if (!singleGearDetails) {
