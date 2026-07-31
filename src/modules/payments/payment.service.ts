@@ -45,7 +45,6 @@ const initiatePayment = async (order: RentalOrder, user: JwtPayload) => {
       customer_id: order.customer_id,
       amount: order.total_amount,
       
-      // paid_at:paid_at
     },
   });
    

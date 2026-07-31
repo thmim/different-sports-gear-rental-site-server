@@ -42,6 +42,10 @@ const getGearDetailsFromDb = async (gearId:string)=>{
    const singleGearDetails = await prisma.gearitems.findUnique({
     where:{
         id:gearId
+    },
+    include:{
+        category:true,
+        provider:true
     }
    })
    if (!singleGearDetails) {
