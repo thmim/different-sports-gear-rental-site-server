@@ -1,62 +1,62 @@
 import { prisma } from "../../lib/prisma";
 import { IGearFilterQuery, IGearItems, IUpdateItems } from "./gearItem.interface"
 
-const createGearItemIntoDb = async (payload:IGearItems,id:string)=>{
-   const {name,description,category_id,brand,daily_price,quantity,product_image = "Not provided",condition} = payload;
-   const provider_id = id;
-   
+const createGearItemIntoDb = async (payload: IGearItems, id: string) => {
+    const { name, description, category_id, brand, daily_price, quantity, product_image = "Not provided", condition } = payload;
+    const provider_id = id;
 
-   const isCategoryExist = await prisma.categories.findUniqueOrThrow({
-    where:{
-        id:category_id
-    }
-   })
 
-   const createGearItem = await prisma.gearitems.create({
-    data:{
-        name,
-        description,
-        category_id,
-        provider_id,
-        product_image,
-        brand,
-        condition:condition,
-        daily_price:daily_price ,
-        quantity
-    }
-   })
+    const isCategoryExist = await prisma.categories.findUniqueOrThrow({
+        where: {
+            id: category_id
+        }
+    })
 
-   return createGearItem;
-   
+    const createGearItem = await prisma.gearitems.create({
+        data: {
+            name,
+            description,
+            category_id,
+            provider_id,
+            product_image,
+            brand,
+            condition: condition,
+            daily_price: daily_price,
+            quantity
+        }
+    })
+
+    return createGearItem;
+
 }
 
 // get all gear item by admin
-const getAllGearFromDb = async ()=>{
-   const allGear = await prisma.gearitems.findMany() ;
-   return allGear; 
+const getAllGearFromDb = async () => {
+    const allGear = await prisma.gearitems.findMany();
+    return allGear;
 
 }
 
 // get gear details by id
-const getGearDetailsFromDb = async (gearId:string)=>{
-   const singleGearDetails = await prisma.gearitems.findUnique({
-    where:{
-        id:gearId
-    },
-    include:{
-        category:true,
-        provider:true
-    }
-   })
-   if (!singleGearDetails) {
+const getGearDetailsFromDb = async (gearId: string) => {
+    const singleGearDetails = await prisma.gearitems.findUnique({
+        where: {
+            id: gearId
+        },
+        include: {
+            category: true,
+            provider: true
+        }
+    })
+    if (!singleGearDetails) {
         throw new Error("Gear item not found");
     }
-   return singleGearDetails;
+    return singleGearDetails;
 }
 
 // get all gear for everyone
-const getGearForAllFromDb = async (query:IGearFilterQuery)=>{
-  const limit = query.limit ? Number(query.limit) : 10;
+const getGearForAllFromDb = async (query: IGearFilterQuery) => {
+    const limit = query.limit ? Number(query.limit) : 10;
     const page = query.page ? Number(query.page) : 1;
     const skip = (page - 1) * limit;
     const sortBy = query.sortBy ? query.sortBy : "created_at";
@@ -68,7 +68,7 @@ const getGearForAllFromDb = async (query:IGearFilterQuery)=>{
             // filtering & searching combined using AND/OR
             AND: [
                 {
-                    is_available: true 
+                    is_available: true
                 },
                 {
                     // searching
@@ -109,13 +109,13 @@ const getGearForAllFromDb = async (query:IGearFilterQuery)=>{
 }
 
 // update item
-const updateGearItemFromDb = async (payload:IUpdateItems,item_id:string,provider_id:string)=>{
-      const item = await prisma.gearitems.findUniqueOrThrow({
+const updateGearItemFromDb = async (payload: IUpdateItems, item_id: string, provider_id: string) => {
+    const item = await prisma.gearitems.findUniqueOrThrow({
         where: {
             id: item_id
         }
     })
-    if ( provider_id !== item.provider_id) {
+    if (provider_id !== item.provider_id) {
         throw new Error("you are not the owner of this item")
     }
     const result = await prisma.gearitems.update({
@@ -129,32 +129,32 @@ const updateGearItemFromDb = async (payload:IUpdateItems,item_id:string,provider
                     password: true
                 }
             },
-            
+
         }
-        
+
     })
     return result;
 
 }
 
 // delete gear item
-const deleteGearItemFromDb = async (itemId:string,providerId:string,isAdmin:boolean)=>{
+const deleteGearItemFromDb = async (itemId: string, providerId: string, isAdmin: boolean) => {
     const item = await prisma.gearitems.findUniqueOrThrow({
-        where:{
-            id:itemId
+        where: {
+            id: itemId
         }
     })
 
-    if(!isAdmin && providerId !== item.provider_id){
+    if (!isAdmin && providerId !== item.provider_id) {
         throw new Error("You don't have access to delete this item")
     }
 
     await prisma.gearitems.delete({
-        where:{
-            id:itemId
+        where: {
+            id: itemId
         }
     })
-     
+
 }
 
 export const gearItemsServices = {
