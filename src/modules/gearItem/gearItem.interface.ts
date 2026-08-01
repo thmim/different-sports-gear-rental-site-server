@@ -5,7 +5,7 @@ export interface IGearItems {
     product_image?: string;
     description: string;
     brand: string;
-    category_id: string;
+    category_name: string;
     is_available?: boolean;
     condition?: ProductCondition;
     daily_price: number;

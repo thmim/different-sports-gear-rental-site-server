@@ -2,13 +2,13 @@ import { prisma } from "../../lib/prisma";
 import { IGearFilterQuery, IGearItems, IUpdateItems } from "./gearItem.interface"
 
 const createGearItemIntoDb = async (payload: IGearItems, id: string) => {
-    const { name, description, category_id, brand, daily_price, quantity, product_image = "Not provided", condition } = payload;
+    const { name, description, category_name, brand, daily_price, quantity, product_image = "Not provided", condition } = payload;
     const provider_id = id;
 
 
-    const isCategoryExist = await prisma.categories.findUniqueOrThrow({
+    const category = await prisma.categories.findUniqueOrThrow({
         where: {
-            id: category_id
+            category_name: category_name
         }
     })
 
@@ -16,7 +16,7 @@ const createGearItemIntoDb = async (payload: IGearItems, id: string) => {
         data: {
             name,
             description,
-            category_id,
+            category_id:category.id,
             provider_id,
             product_image,
             brand,
@@ -118,6 +118,13 @@ const getProviderOwnGearListFromDb = async(providerId:string)=>{
     const item = await prisma.gearitems.findMany({
         where: {
             provider_id: providerId
+        },
+        include:{
+            category:{
+                select:{
+                    category_name:true
+                }
+            }
         }
     })
     if (item.length === 0) {
