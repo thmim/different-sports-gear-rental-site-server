@@ -11,7 +11,7 @@ const createCategories = catchAsync(async(req:Request,res:Response,next:NextFunc
     sendResponse(res,{
     success:true,
     statusCode:httpStatus.CREATED,
-    message:"User Registered successfully",
+    message:"Category Created successfully",
     data:{result}
 })
 

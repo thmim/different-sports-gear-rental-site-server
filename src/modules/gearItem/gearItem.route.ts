@@ -11,7 +11,8 @@ router.post("/gear",auth(Role.PROVIDER),gearItemsController.createGearItem);
 router.put("/:id", auth(Role.PROVIDER) ,gearItemsController.updateGearItem);
 // item delete api
 router.delete("/:id", auth(Role.PROVIDER,Role.ADMIN) ,gearItemsController.deleteGearItem);
-
+// get provider own create product list
+router.get("/gear-list",auth(Role.PROVIDER),gearItemsController.getProviderOwnGearItem);
 // get all gear by admin
 router.get("/gear",auth(Role.ADMIN),gearItemsController.getAllGearItem);
 // get single gear details by id

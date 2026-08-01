@@ -112,6 +112,19 @@ const getGearForAllFromDb = async (query: IGearFilterQuery) => {
     return gears;
 }
 
+// get provider own gear list
+const getProviderOwnGearListFromDb = async(providerId:string)=>{
+    const item = await prisma.gearitems.findMany({
+        where: {
+            id: providerId
+        }
+    })
+    if (item.length === 0) {
+        throw new Error("You Don't have any Item")
+    }
+    return item;
+}
+
 // update item
 const updateGearItemFromDb = async (payload: IUpdateItems, item_id: string, provider_id: string) => {
     const item = await prisma.gearitems.findUniqueOrThrow({
@@ -167,5 +180,6 @@ export const gearItemsServices = {
     deleteGearItemFromDb,
     getAllGearFromDb,
     getGearDetailsFromDb,
-    getGearForAllFromDb
+    getGearForAllFromDb,
+    getProviderOwnGearListFromDb
 }

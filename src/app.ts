@@ -43,6 +43,8 @@ app.use("/api/provider",gearItemRoute);
 
 app.use("/api/provider/gear",gearItemRoute);
 app.use("/api/admin",gearItemRoute);
+// provider own gear get api
+app.use("/api/own",gearItemRoute);
 
 // get all user
 app.use("/api/admin",userRouter);

@@ -43,6 +43,20 @@ const getAllGearItemForAll = catchAsync(async (req: Request, res: Response, next
 
 })
 
+// get provider own create gear list
+const getProviderOwnGearItem = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const provider_id = req.user?.id;
+const result = await gearItemsServices.getProviderOwnGearListFromDb(provider_id as string)
+
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"GearItem updated successfully",
+        data:result
+    })
+})
+
+
 // get gear details by id
 const getGearDetails = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
@@ -105,5 +119,6 @@ export const gearItemsController = {
     deleteGearItem,
     getAllGearItem,
     getGearDetails,
-    getAllGearItemForAll
+    getAllGearItemForAll,
+    getProviderOwnGearItem
 }
