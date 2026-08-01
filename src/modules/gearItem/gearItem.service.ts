@@ -114,9 +114,10 @@ const getGearForAllFromDb = async (query: IGearFilterQuery) => {
 
 // get provider own gear list
 const getProviderOwnGearListFromDb = async(providerId:string)=>{
+ 
     const item = await prisma.gearitems.findMany({
         where: {
-            id: providerId
+            provider_id: providerId
         }
     })
     if (item.length === 0) {
