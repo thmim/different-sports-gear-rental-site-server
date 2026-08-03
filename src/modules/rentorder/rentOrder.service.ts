@@ -133,7 +133,9 @@ const getConfirmedRentalOrderFromDb = async (customerId: string) => {
     const ownOrder = await prisma.rentalOrder.findMany({
         where: {
             customer_id:customerId,
-            status: "CONFIRMED",
+           status: {
+            in: ["CONFIRMED", "RETURNED"]
+        }
         },
         include:{
             gearItem:true

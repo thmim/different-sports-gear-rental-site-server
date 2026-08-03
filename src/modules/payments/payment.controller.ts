@@ -17,10 +17,10 @@ const verifyPayment = catchAsync(async (req:Request, res:Response) => {
 // console.log(response === "success","paycontres")
 // console.log((response as { success: boolean; message: string }).success,"paycontres")
   if ((response as { success: boolean; message: string }).success) {
-    res.redirect("http://localhost:3000/customer-dashboard/rentals");
+    res.redirect("https://sports-gear-rental-site.vercel.app/customer-dashboard/rentals");
   } else if (!(response as { success: boolean; message: string }).success) {
-    res.redirect("http://localhost:3000/customer-dashboard");
-  } else{res.redirect("http://localhost:3000/customer-dashboard")};
+    res.redirect("https://sports-gear-rental-site.vercel.app/customer-dashboard");
+  } else{res.redirect("https://sports-gear-rental-site.vercel.app/customer-dashboard")};
   
 });
 
