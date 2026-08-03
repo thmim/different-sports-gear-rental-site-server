@@ -53,6 +53,9 @@ app.use("/api/gear/users",gearItemRoute);
 // get all gear for everyone
 app.use("/api/gear",gearItemRoute);
 
+// get payment confirmed rental gear
+app.use("/api/customer",rentalOrderRoute);
+
 // rental order
 app.use("/api",rentalOrderRoute);
 app.use("/api/rentals",rentalOrderRoute);

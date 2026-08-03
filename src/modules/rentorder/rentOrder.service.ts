@@ -128,6 +128,24 @@ const getRentalOrderFromDb = async (providerId: string) => {
 
 }
 
+// get payment confirmed rental gear for customer
+const getConfirmedRentalOrderFromDb = async (customerId: string) => {
+    const ownOrder = await prisma.rentalOrder.findMany({
+        where: {
+            customer_id:customerId,
+            status: "CONFIRMED",
+        },
+        include:{
+            gearItem:true
+            
+        }
+     
+    })
+    return ownOrder;
+
+
+}
+
 // update rental order status through provider
 const updateRentalOrderStatusFromDb = async (
     rentalId: string,
@@ -207,5 +225,6 @@ export const rentalOrderServices = {
     getAllRentalOrderFromDb,
     getRentalOrderFromDb,
     getAllRentalOrderDetailsFromDb,
-    updateRentalOrderStatusFromDb
+    updateRentalOrderStatusFromDb,
+    getConfirmedRentalOrderFromDb
 }

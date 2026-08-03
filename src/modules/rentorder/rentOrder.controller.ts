@@ -49,6 +49,19 @@ const getRentalOrder = catchAsync(async(req:Request,res:Response,next:NextFuncti
 
 })
 
+// get customers create rentals
+const getConfirmedRentalOrder = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+    const customer_id = req.user?.id;
+    const result = await rentalOrderServices.getConfirmedRentalOrderFromDb(customer_id as string);
+    sendResponse(res,{
+        success:true,
+        statusCode:httpStatus.OK,
+        message:"Get Booked rental order successfully",
+        data:result
+    })
+
+})
+
 // get rental details
 const getRentalOrderDetails = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
     const orderId = req.params.id;
@@ -93,5 +106,6 @@ export const rentalOrderController = {
     getAllRentalOrder,
     getRentalOrder,
     getRentalOrderDetails,
-    updateRentalOrderstatus
+    updateRentalOrderstatus,
+    getConfirmedRentalOrder
 }
