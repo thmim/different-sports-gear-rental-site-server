@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchasync";
 import { paymentServices } from "./payment.service";
+import config from "../../config";
 
 const verifyPayment = catchAsync(async (req:Request, res:Response) => {
 
@@ -12,12 +13,14 @@ const verifyPayment = catchAsync(async (req:Request, res:Response) => {
     status as string,
     payload,
   );
-
-  if (response === "success") {
-    res.redirect("https://www.facebook.com");
-  } else if (response === "fail") {
-    res.redirect("https://www.programming-hero.com/");
-  } else if (response === "cancel") res.redirect("https://www.youtube.com");
+// console.log(response,"paycontres")
+// console.log(response === "success","paycontres")
+// console.log((response as { success: boolean; message: string }).success,"paycontres")
+  if ((response as { success: boolean; message: string }).success) {
+    res.redirect("http://localhost:3000/customer-dashboard/rentals");
+  } else if (!(response as { success: boolean; message: string }).success) {
+    res.redirect("http://localhost:3000/customer-dashboard");
+  } else{res.redirect("http://localhost:3000/customer-dashboard")};
   
 });
 
