@@ -1,6 +1,6 @@
 # 🚴 GearUp - Sports & Outdoor Equipment Rental Site Backend
 
-GearUp is a backend project for a sports and outdoor equipment rental platform. It allows customers to rent sports gear, providers to manage their equipment, and admins to oversee the entire platform.
+GearUp is a full-stack rental platform backend for sports and outdoor equipment. Customers browse and rent gear, providers manage their inventory and fulfill orders, and admins oversee the whole platform. It features role-based access, JWT authentication, and **SSLCommerz payment integration** with server-side validation.
 
 ## 🚀 Live API
 
@@ -17,63 +17,72 @@ https://documenter.getpostman.com/view/45092075/2sBY4LRMfv
 
 ## 🛠️ Tech Stack
 
-- Node.js
-- Express.js
-- TypeScript
-- PostgreSQL
-- Prisma ORM
-- JWT Authentication
-- SSLCommerz Payment Gateway
-- bcrypt
-- Zod Validation
+| Layer | Technologies |
+| --- | --- |
+| **Language** | TypeScript |
+| **Runtime & Framework** | Node.js, Express.js |
+| **Database** | PostgreSQL |
+| **ORM** | Prisma |
+| **Authentication** | JWT (JSON Web Tokens) |
+| **Payments** | SSLCommerz |
+| **Deployment** | Vercel |
+| **Frontend (client)** | Next.js, ShadCN UI |
+
+---
+## 🔑 Demo Admin Access
+
+Use these credentials to explore the admin features:
+
+| Field | Value |
+| --- | --- |
+| Email | `messi10@gmail.com` |
+| Password | `messi10` |
 
 ---
 
 ## ✨ Features
 
-### Authentication
+### 🌍 Public
+- Browse all available sports and outdoor gear
+- Search and filter by category, price, brand and availability
+- View gear details and specifications
 
-- User Registration
-- User Login
-- JWT Authentication
-- Get Current User By Admin
-- Role-based Authorization
+### 🧑 Customer
+- Register and log in as a customer
+- Place rental orders by selecting gear and dates
+- Pay securely through **SSLCommerz** when confirming an order
+- View payment history and payment status
+- Track rental order status from placement to return
+- Leave reviews after returning gear
+- Manage profile
 
-### Customer Features
-
-- Browse all available gear
-- View gear details
-- Search and filter gear
-- Create rental orders
-- Track rental status
-- Make secure payments
-- Submit reviews
-
-### Provider Features
-
-- Add gear items
-- Update gear information
-- Delete own gear items
+### 🏪 Provider
+- Register and log in as a provider
+- Add, edit and remove gear from inventory
+- Manage stock and availability
 - View incoming rental orders
-- Update rental status
-- Manage inventory
+- Update order status (confirm, picked up, returned)
 
-### Admin Features
-
-- Manage users
-- Update user roles
-- Manage categories
-- View all rental orders
-- Delete any gear item
-- Moderate platform resources
+### 🛡️ Admin
+- View and manage all users (suspend or activate accounts)
+- View all gear listings and rental orders
+- Manage gear categories
 
 ---
 
-## 📌 User Roles
 
-- Customer
-- Provider
-- Admin
+---
+
+## 👥 Roles & Permissions
+
+| Role | Description | Key Permissions |
+| --- | --- | --- |
+| **Customer** | Users who rent gear | Browse gear, place orders, pay, track status, leave reviews |
+| **Provider** | Gear vendors and rental shops | Manage inventory, view orders, update order status |
+| **Admin** | Platform moderators | Manage users, oversee rentals, manage categories |
+
+---
+
 
 ---
 
@@ -364,14 +373,19 @@ src
 ```
 
 ---
-## 📁 Admin Credential
-email: messi10@gmail.com
- password: messi10
+## 🔒 Security Highlights
+
+- JWT authentication with role-based route protection
+- Server-side payment validation before any order status changes
+- Permission-scoped workflows for each role (customer, provider, admin)
+- Secrets and credentials kept in environment variables
 
 ## 👨‍💻 Author
 
-**Md Taharim Hasan Mim**
-## 👨‍💻 Linkedin: https://www.linkedin.com/in/th-mim10/
-## 👨‍💻 Portfolio: https://taharim-hasan.vercel.app/
+**Taharim Hasan Mim**
+Full Stack Developer | Khulna, Bangladesh
+
+📧 mdtaharimmim1010@gmail.com
+🔗 [LinkedIn](https://www.linkedin.com/in/th-mim10/) · [Portfolio](https://taharim-hasan.vercel.app/)
 
 
